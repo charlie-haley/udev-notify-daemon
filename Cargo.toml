@@ -1,0 +1,12 @@
+[package]
+name = "udev-dbus-notify"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+notify-rust = "4.5.8"
+anyhow = "1.0.65"
+udev = "0.6.3"
+tokio-udev = "0.8.0"
+futures-util = "0.3"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
