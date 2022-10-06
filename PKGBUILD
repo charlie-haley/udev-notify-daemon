@@ -7,13 +7,17 @@ pkgdesc="A simple daemon that listens for udev USB events and sends out a notifi
 url="https://github.com/charlie-haley/udev-notify-daemon"
 arch=("x86_64")
 license=("MIT")
-source_x86_64=(
+source=(
   "udev-notify-daemon_amd64::https://github.com/charlie-haley/udev-notify-daemon/releases/download/v${pkgver}/udev-notify-daemon_amd64"
+  "https://raw.githubusercontent.com/charlie-haley/udev-notify-daemon/v${pkgver}/udev-notify-daemon.service"
+)
+sha256sums=(
+    '<sha256-binary>'
+    '<sha256-unit>'
 )
 _srcname=udev-notify-daemon
 
 package() {
-	install -Dm755 ${_srcname} "${pkgdir}/usr/bin/${_srcname}"
-
-    install -m644  $startdir/udev-notify-daemon.service ${pkgdir}/usr/lib/systemd/user || return 1
+	install -Dm755 udev-notify-daemon_amd64 ${pkgdir}/usr/bin/udev-notify-daemon_amd64
+    install -Dm755 udev-notify-daemon.service ${pkgdir}/usr/lib/systemd/user/udev-notify-daemon.service
 }

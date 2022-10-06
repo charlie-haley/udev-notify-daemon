@@ -37,6 +37,14 @@ jobs:
           sed -i "s/<placeholder-version>/${{ env.VERSION }}/g" PKGBUILD
           sed -i "s/<release-number>/$GITHUB_RUN_NUMBER/g" PKGBUILD
 
+      - name: Replace sha256 in PKGBUILD
+        run: |
+          SHA256_BIN=`sha256sum udev-notify-daemon_amd64 | cut -f1 -d' '`
+          SHA256_UNIT=`sha256sum udev-notify-daemon.service | cut -f1 -d' '`
+
+          sed -i "s/<sha256-binary>/$SHA256_BIN/g" PKGBUILD
+          sed -i "s/<sha256-unit>/$SHA256_UNIT/g" PKGBUILD
+
       - name: Publish AUR bin package
         uses: KSXGitHub/github-actions-deploy-aur@v2.5.0
         with:
