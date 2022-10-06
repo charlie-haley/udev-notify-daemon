@@ -1,0 +1,8 @@
+[Unit]
+Description=A simple daemon that listens for udev USB events and sends out a notification to dbus
+
+[Service]
+ExecStart=/usr/local/bin/udev-notify-daemon
+
+[Install]
+WantedBy=multi-user.target

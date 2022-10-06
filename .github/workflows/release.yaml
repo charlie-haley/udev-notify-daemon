@@ -12,21 +12,38 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set version env var
+        run: |
+          TAG=${{ github.ref_name }}
+          echo "VERSION=${TAG#v}" >> $GITHUB_ENV
+
+      - name: Setup deps
+        run: sudo apt-get install -y libudev-dev
+
       - name: Build release
         run: make release
+
+      - name: Rename binary 
+        run: |
+          mv target/release/udev-notify-daemon udev-notify-daemon_amd64
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: target/release/udev-dbus-notify
+          files: udev-notify-daemon_amd64
 
-      - name: Publish AUR package
-        uses: KSXGitHub/github-actions-deploy-aur@2.5.0
+      - name: Replace version in PKGBUILD
+        run: |
+          sed -i "s/<placeholder-version>/${{ env.VERSION }}/g" PKGBUILD
+          sed -i "s/<release-number>/$GITHUB_RUN_NUMBER/g" PKGBUILD
+
+      - name: Publish AUR bin package
+        uses: KSXGitHub/github-actions-deploy-aur@v2.5.0
         with:
-          pkgname: my-awesome-package
+          pkgname: udev-notify-daemon-bin
           pkgbuild: ./PKGBUILD
           commit_username: ${{ secrets.AUR_USERNAME }}
           commit_email: ${{ secrets.AUR_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-          commit_message: Update AUR package
-          ssh_keyscan_types: rsa,dsa,ecdsa,ed25519
+          commit_message: ${{ env.VERSION }}
+          force_push: 'true'
