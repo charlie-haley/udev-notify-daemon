@@ -18,6 +18,6 @@ sha256sums=(
 _srcname=udev-notify-daemon
 
 package() {
-	install -Dm755 udev-notify-daemon_amd64 ${pkgdir}/usr/bin/udev-notify-daemon_amd64
+    install -Dm755 udev-notify-daemon_amd64 ${pkgdir}/usr/local/bin/udev-notify-daemon
     install -Dm755 udev-notify-daemon.service ${pkgdir}/usr/lib/systemd/user/udev-notify-daemon.service
 }
